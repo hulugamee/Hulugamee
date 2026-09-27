@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hulugamee</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#070d16;
+  color:#fff;
+  padding-bottom:80px;
+}
+
+header{
+  background:#101927;
+  padding:16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:sticky;
+  top:0;
+  z-index:10;
+  border-bottom:1px solid #26344a;
+}
+
+.logo{
+  color:#35e58b;
+  font-size:21px;
+  font-weight:bold;
+}
+
+.balance{
+  background:#172438;
+  padding:8px 12px;
+  border-radius:20px;
+  font-size:13px;
+}
+
+.hero{
+  margin:15px;
+  padding:25px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#123526,#111c2c);
+  text-align:center;
+}
+
+.hero h1{
+  color:#35e58b;
+  margin-bottom:8px;
+}
+
+.hero p{
+  color:#aab6c7;
+}
+
+section{
+  padding:0 15px;
+  margin-top:25px;
+}
+
+section h2{
+  font-size:19px;
+  margin-bottom:12px;
+}
+
+.wallet{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:15px;
+}
+
+.wallet-box{
+  background:#111b2b;
+  border:1px solid #26344a;
+  padding:16px;
+  border-radius:15px;
+  text-align:center;
+}
+
+.wallet-box span{
+  display:block;
+  color:#9eacbf;
+  font-size:12px;
+  margin-bottom:7px;
+}
+
+.wallet-box strong{
+  color:#35e58b;
+  font-size:19px;
+}
+
+.games{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.game{
+  background:#111b2b;
+  border:1px solid #26344a;
+  border-radius:15px;
+  padding:18px 10px;
+  text-align:center;
+  text-decoration:none;
+  color:#fff;
+}
+
+.game .icon{
+  display:block;
+  font-size:30px;
+  margin-bottom:8px;
+}
+
+.game small{
+  display:block;
+  color:#93a1b5;
+  margin-top:5px;
+}
+
+.buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+button{
+  border:0;
+  padding:13px;
+  border-radius:11px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.deposit-btn{
+  background:#35e58b;
+  color:#06110b;
+}
+
+.withdraw-btn{
+  background:#25344a;
+  color:#fff;
+}
+
+.card{
+  background:#111b2b;
+  border:1px solid #26344a;
+  border-radius:15px;
+  padding:16px;
+  margin-top:10px;
+}
+
+.card h3{
+  margin-top:0;
+}
+
+.telebirr-number{
+  background:#0a1421;
+  border:1px solid #35e58b;
+  border-radius:12px;
+  padding:15px;
+  text-align:center;
+  margin:12px 0;
+}
+
+.telebirr-number strong{
+  color:#35e58b;
+  font-size:22px;
+  display:block;
+  margin:7px 0;
+}
+
+.input{
+  width:100%;
+  padding:13px;
+  margin:6px 0;
+  border-radius:10px;
+  border:1px solid #34445c;
+  background:#09111d;
+  color:white;
+  outline:none;
+}
+
+.submit{
+  width:100%;
+  margin-top:8px;
+  background:#35e58b;
+  color:#06110b;
+}
+
+.copy{
+  background:#26344a;
+  color:white;
+  padding:9px 13px;
+}
+
+.note{
+  color:#8795a8;
+  font-size:11px;
+  line-height:1.5;
+}
+
+.history{
+  background:#111b2b;
+  border:1px solid #26344a;
+  border-radius:15px;
+  padding:15px;
+}
+
+.history p{
+  color:#aab6c7;
+  font-size:13px;
+  border-bottom:1px solid #243147;
+  padding:8px 0;
+}
+
+.history p:last-child{
+  border-bottom:0;
+}
+
+.profile{
+  background:#111b2b;
+  border:1px solid #26344a;
+  border-radius:15px;
+  padding:16px;
+}
+
+.profile p{
+  color:#9eacbf;
+  font-size:13px;
+}
+
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  background:#0d1522;
+  border-top:1px solid #26344a;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  padding:9px 5px;
+  z-index:20;
+}
+
+.bottom-nav a{
+  text-align:center;
+  color:#aab6c7;
+  text-decoration:none;
+  font-size:11px;
+}
+
+.bottom-nav span{
+  display:block;
+  font-size:20px;
+  margin-bottom:3px;
+}
+
+.hidden{
+  display:none;
+}
+
+@media(min-width:650px){
+  main{
+    max-width:800px;
+    margin:auto;
+  }
+
+  .games{
+    grid-template-columns:repeat(4,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">HULUGAMEE</div>
+
+  <div class="balance">
+    💰 <span id="balance">1000.00</span> ETB
+  </div>
+</header>
+
+<main>
+
+<!-- HOME -->
+<div class="hero">
+  <h1>Hulugamee</h1>
+  <p>Games • Sports • Wallet</p>
+</div>
+
+<!-- BALANCE -->
+<div class="wallet">
+
+  <div class="wallet-box">
+    <span>Balance</span>
+    <strong id="walletBalance">1000.00 ETB</strong>
+  </div>
+
+  <div class="wallet-box">
+    <span>Account</span>
+    <strong id="telegramUser">Guest</strong>
+  </div>
+
+</div>
+
+
+<!-- GAMES -->
+<section id="games">
+
+<h2>🎮 Games</h2>
+
+<div class="games">
+
+<a class="game" href="games/aviator.html">
+  <span class="icon">✈️</span>
+  <b>Aviator</b>
+  <small>Multiplier</small>
+</a>
+
+<a class="game" href="games/jetx.html">
+  <span class="icon">🚀</span>
+  <b>JetX</b>
+  <small>Multiplier</small>
+</a>
+
+<a class="game" href="games/fast-keno.html">
+  <span class="icon">🎱</span>
+  <b>Fast Keno</b>
+  <small>Numbers</small>
+</a>
+
+<a class="game" href="games/dice.html">
+  <span class="icon">🎲</span>
+  <b>Dice</b>
+  <small>Dice</small>
+</a>
+
+<a class="game" href="games/mines.html">
+  <span class="icon">💣</span>
+  <b>Mines</b>
+  <small>Grid</small>
+</a>
+
+<a class="game" href="games/plinko.html">
+  <span class="icon">🔴</span>
+  <b>Plinko</b>
+  <small>Drop</small>
+</a>
+
+<a class="game" href="games/spin.html">
+  <span class="icon">🎰</span>
+  <b>Spin</b>
+  <small>Spin</small>
+</a>
+
+<a class="game" href="games/chicken.html">
+  <span class="icon">🐔</span>
+  <b>Chicken</b>
+  <small>Demo</small>
+</a>
+
+</div>
+</section>
+
+
+<!-- SPORTS -->
+<section id="sports">
+
+<h2>⚽ Sports</h2>
+
+<div class="card">
+  ⚽ Football
+</div>
+
+<div class="card">
+  🏀 Basketball
+</div>
+
+<div class="card">
+  🎾 Tennis
+</div>
+
+<p class="note">
+Sports section is currently a demo.
+</p>
+
+</section>
+
+
+<!-- WALLET -->
+<section id="wallet">
+
+<h2>💰 Wallet</h2>
+
+<div class="buttons">
+
+<button class="deposit-btn"
+onclick="showDeposit()">
+➕ Deposit
+</button>
+
+<button class="withdraw-btn"
+onclick="showWithdraw()">
+➖ Withdrawal
+</button>
+
+</div>
+
+
+<!-- DEPOSIT -->
+<div id="depositBox" class="card hidden">
+
+<h3>➕ Telebirr Deposit</h3>
+
+<p>
+Deposit through Telebirr using this number:
+</p>
+
+<div class="telebirr-number">
+
+📱 Telebirr
+
+<strong>0935801301</strong>
+
+<button class="copy"
+onclick="copyNumber()">
+Copy Number
+</button>
+
+</div>
+
+<input
+id="depositAmount"
+class="input"
+type="number"
+placeholder="Enter amount"
+min="1">
+
+<input
+id="depositSender"
+class="input"
+type="tel"
+placeholder="Your Telebirr phone number">
+
+<input
+id="depositReference"
+class="input"
+type="text"
+placeholder="Transaction/reference number">
+
+<button
+class="submit"
+onclick="depositRequest()">
+SUBMIT DEPOSIT REQUEST
+</button>
+
+<p class="note">
+After sending the money, submit the transaction/reference
+number. The admin will verify the payment.
+</p>
+
+</div>
+
+
+<!-- WITHDRAWAL -->
+<div id="withdrawBox" class="card hidden">
+
+<h3>➖ Withdrawal</h3>
+
+<input
+id="withdrawPhone"
+class="input"
+type="tel"
+placeholder="Your Telebirr phone number">
+
+<input
+id="withdrawAmount"
+class="input"
+type="number"
+placeholder="Withdrawal amount"
+min="1">
+
+<button
+class="submit"
+onclick="withdrawRequest()">
+REQUEST WITHDRAWAL
+</button>
+
+<p class="note">
+Enter the Telebirr number where you want to receive
+the money. Withdrawal requests require admin approval.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- PROFILE -->
+<section>
+
+<h2>👤 Profile</h2>
+
+<div class="profile">
+
+<b id="profileName">
+Telegram User
+</b>
+
+<p id="profileId">
+Telegram authentication waiting...
+</p>
+
+</div>
+
+</section>
+
+
+<!-- TRANSACTIONS -->
+<section>
+
+<h2>📋 Transactions</h2>
+
+<div
+id="history"
+class="history">
+
+<p>No transactions yet.</p>
+
+</div>
+
+</section>
+
+</main>
+
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+
+<a href="#">
+<span>🏠</span>
+Home
+</a>
+
+<a href="#games">
+<span>🎮</span>
+Games
+</a>
+
+<a href="#sports">
+<span>⚽</span>
+Sports
+</a>
+
+<a href="#wallet">
+<span>💰</span>
+Wallet
+</a>
+
+</nav>
+
+
+<script>
+
+/* =========================
+   TELEGRAM
+========================= */
+
+const tg = window.Telegram?.WebApp;
+
+if(tg){
+
+  tg.ready();
+  tg.expand();
+
+  const user =
+    tg.initDataUnsafe?.user;
+
+  if(user){
+
+    document.getElementById(
+      "telegramUser"
+    ).textContent =
+      user.first_name || "User";
+
+    document.getElementById(
+      "profileName"
+    ).textContent =
+      (user.first_name || "") +
+      (user.last_name
+        ? " " + user.last_name
+        : "");
+
+    document.getElementById(
+      "profileId"
+    ).textContent =
+      "Telegram ID: " + user.id;
+  }
+}
+
+
+/* =========================
+   BALANCE
+========================= */
+
+let balance =
+Number(
+  localStorage.getItem(
+    "hulugamee_balance"
+  ) || 20
+);
+
+
+function updateBalance(){
+
+  document.getElementById(
+    "balance"
+  ).textContent =
+    balance.toFixed(2);
+
+  document.getElementById(
+    "walletBalance"
+  ).textContent =
+    balance.toFixed(2) +
+    " ETB";
+
+  localStorage.setItem(
+    "hulugamee_balance",
+    balance
+  );
+}
+
+updateBalance();
+
+
+/* =========================
+   SHOW DEPOSIT
+========================= */
+
+function showDeposit(){
+
+  document.getElementById(
+    "depositBox"
+  ).classList.remove("hidden");
+
+  document.getElementById(
+    "withdrawBox"
+  ).classList.add("hidden");
+
+}
+
+
+/* =========================
+   SHOW WITHDRAWAL
+========================= */
+
+function showWithdraw(){
+
+  document.getElementById(
+    "withdrawBox"
+  ).classList.remove("hidden");
+
+  document.getElementById(
+    "depositBox"
+  ).classList.add("hidden");
+
+}
+
+
+/* =========================
+   COPY TELEBIRR
+========================= */
+
+function copyNumber(){
+
+  navigator.clipboard.writeText(
+    "0935801301"
+  );
+
+  alert(
+    "Telebirr number copied: 0935801301"
+  );
+}
+
+
+/* =========================
+   DEPOSIT REQUEST
+========================= */
+
+function depositRequest(){
+
+  const amount =
+    Number(
+      document.getElementById(
+        "depositAmount"
+      ).value
+    );
+
+  const sender =
+    document.getElementById(
+      "depositSender"
+    ).value.trim();
+
+  const reference =
+    document.getElementById(
+      "depositReference"
+    ).value.trim();
+
+  if(
+    amount <= 0 ||
+    !sender ||
+    !reference
+  ){
+
+    alert(
+      "Please complete all deposit fields."
+    );
+
+    return;
+  }
+
+  addHistory(
+    "Deposit request: " +
+    amount.toFixed(2) +
+    " ETB — Pending"
+  );
+
+  alert(
+    "Deposit request submitted. " +
+    "Admin will verify your Telebirr payment."
+  );
+
+}
+
+
+/* =========================
+   WITHDRAWAL REQUEST
+========================= */
+
+function withdrawRequest(){
+
+  const phone =
+    document.getElementById(
+      "withdrawPhone"
+    ).value.trim();
+
+  const amount =
+    Number(
+      document.getElementById(
+        "withdrawAmount"
+      ).value
+    );
+
+  if(!phone || amount <= 0){
+
+    alert(
+      "Enter your Telebirr number and amount."
+    );
+
+    return;
+  }
+
+  if(amount > balance){
+
+    alert(
+      "Insufficient balance."
+    );
+
+    return;
+  }
+
+  addHistory(
+    "Withdrawal request: " +
+    amount.toFixed(2) +
+    " ETB → " +
+    phone +
+    " — Pending"
+  );
+
+  alert(
+    "Withdrawal request submitted. " +
+    "Admin approval is required."
+  );
+
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function addHistory(text){
+
+  const history =
+    document.getElementById(
+      "history"
+    );
+
+  if(
+    history.children.length === 1 &&
+    history.children[0].textContent ===
+    "No transactions yet."
+  ){
+
+    history.innerHTML = "";
+  }
+
+  const item =
+    document.createElement("p");
+
+  item.textContent =
+    new Date().toLocaleTimeString() +
+    " — " +
+    text;
+
+  history.prepend(item);
+}
+
+</script>
+
+</body>
+  </html>
