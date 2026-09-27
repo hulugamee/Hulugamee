@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Hulugamee</title>
+
+  <!-- Telegram Mini App -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    body{
+      font-family:Arial,sans-serif;
+      background:#070d16;
+      color:#fff;
+      padding-bottom:80px;
+    }
+
+    header{
+      background:#101927;
+      padding:16px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      position:sticky;
+      top:0;
+      z-index:10;
+      border-bottom:1px solid #26344a;
+    }
+
+    .logo{
+      color:#35e58b;
+      font-size:21px;
+      font-weight:bold;
+    }
+
+    .balance{
+      background:#172438;
+      padding:8px 12px;
+      border-radius:20px;
+      font-size:13px;
+    }
+
+    .hero{
+      margin:15px;
+      padding:24px;
+      border-radius:18px;
+      background:linear-gradient(135deg,#123526,#111c2c);
+      text-align:center;
+    }
+
+    .hero h1{
+      color:#35e58b;
+      margin-bottom:8px;
+    }
+
+    .hero p{
+      color:#aab6c7;
+      font-size:14px;
+    }
+
+    .wallet{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin:15px;
+    }
+
+    .wallet-box{
+      background:#111b2b;
+      border:1px solid #26344a;
+      padding:16px;
+      border-radius:15px;
+      text-align:center;
+    }
+
+    .wallet-box span{
+      display:block;
+      color:#9eacbf;
+      font-size:12px;
+      margin-bottom:7px;
+    }
+
+    .wallet-box strong{
+      color:#35e58b;
+      font-size:20px;
+    }
+
+    section{
+      padding:0 15px;
+      margin-top:25px;
+    }
+
+    section h2{
+      font-size:19px;
+      margin-bottom:12px;
+    }
+
+    .games{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:10px;
+    }
+
+    .game{
+      background:#111b2b;
+      border:1px solid #26344a;
+      border-radius:15px;
+      padding:18px 10px;
+      text-align:center;
+      text-decoration:none;
+      color:white;
+    }
+
+    .game .icon{
+      font-size:31px;
+      display:block;
+      margin-bottom:8px;
+    }
+
+    .game small{
+      display:block;
+      color:#93a1b5;
+      margin-top:5px;
+    }
+
+    .buttons{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    button{
+      border:0;
+      padding:13px;
+      border-radius:11px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .deposit{
+      background:#35e58b;
+      color:#06110b;
+    }
+
+    .withdraw{
+      background:#25344a;
+      color:white;
+    }
+
+    .sports-card,
+    .profile-card,
+    .history{
+      background:#111b2b;
+      border:1px solid #26344a;
+      border-radius:15px;
+      padding:16px;
+      margin-bottom:9px;
+    }
+
+    .sports-card{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .sports-card span{
+      color:#8f9db0;
+      font-size:12px;
+    }
+
+    .profile-card p{
+      color:#a1aec0;
+      margin-top:7px;
+      font-size:13px;
+    }
+
+    .history p{
+      color:#aab6c7;
+      font-size:13px;
+      padding:7px 0;
+      border-bottom:1px solid #243147;
+    }
+
+    .history p:last-child{
+      border-bottom:0;
+    }
+
+    .bottom-nav{
+      position:fixed;
+      bottom:0;
+      left:0;
+      right:0;
+      background:#0d1522;
+      border-top:1px solid #26344a;
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      padding:9px 5px;
+      z-index:20;
+    }
+
+    .bottom-nav a{
+      text-align:center;
+      color:#aab6c7;
+      text-decoration:none;
+      font-size:11px;
+    }
+
+    .bottom-nav span{
+      display:block;
+      font-size:20px;
+      margin-bottom:3px;
+    }
+
+    .note{
+      color:#8795a8;
+      font-size:11px;
+      margin-top:10px;
+      line-height:1.5;
+    }
+
+    @media(min-width:650px){
+      .games{
+        grid-template-columns:repeat(4,1fr);
+      }
+
+      main{
+        max-width:800px;
+        margin:auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">HULUGAMEE</div>
+  <div class="balance">
+    💰 <span id="balance">1000.00</span> ETB
+  </div>
+</header>
+
+<main>
+
+  <!-- HOME -->
+  <div class="hero">
+    <h1>Hulugamee</h1>
+    <p>Games • Sports • Wallet</p>
+  </div>
+
+  <!-- WALLET -->
+  <div class="wallet">
+
+    <div class="wallet-box">
+      <span>Available Balance</span>
+      <strong id="walletBalance">1000.00 ETB</strong>
+    </div>
+
+    <div class="wallet-box">
+      <span>Account</span>
+      <strong id="telegramUser">Guest</strong>
+    </div>
+
+  </div>
+
+  <!-- GAMES -->
+  <section id="games">
+    <h2>🎮 Games</h2>
+
+    <div class="games">
+
+      <a class="game" href="games/aviator.html">
+        <span class="icon">✈️</span>
+        <b>Aviator</b>
+        <small>Multiplier game</small>
+      </a>
+
+      <a class="game" href="games/jetx.html">
+        <span class="icon">🚀</span>
+        <b>JetX</b>
+        <small>Multiplier game</small>
+      </a>
+
+      <a class="game" href="games/fast-keno.html">
+        <span class="icon">🎱</span>
+        <b>Fast Keno</b>
+        <small>Number game</small>
+      </a>
+
+      <a class="game" href="games/dice.html">
+        <span class="icon">🎲</span>
+        <b>Dice</b>
+        <small>Dice game</small>
+      </a>
+
+      <a class="game" href="games/mines.html">
+        <span class="icon">💣</span>
+        <b>Mines</b>
+        <small>Grid game</small>
+      </a>
+
+      <a class="game" href="games/plinko.html">
+        <span class="icon">🔴</span>
+        <b>Plinko</b>
+        <small>Drop game</small>
+      </a>
+
+      <a class="game" href="games/spin.html">
+        <span class="icon">🎰</span>
+        <b>Spin</b>
+        <small>Spin game</small>
+      </a>
+
+      <a class="game" href="games/chicken.html">
+        <span class="icon">🐔</span>
+        <b>Chicken</b>
+        <small>Demo game</small>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- SPORTS -->
+  <section id="sports">
+    <h2>⚽ Sports</h2>
+
+    <div class="sports-card">
+      <b>⚽ Football</b>
+      <span>Today</span>
+    </div>
+
+    <div class="sports-card">
+      <b>🏀 Basketball</b>
+      <span>Today</span>
+    </div>
+
+    <div class="sports-card">
+      <b>🎾 Tennis</b>
+      <span>Today</span>
+    </div>
+
+    <p class="note">
+      Sports section is currently demo only.
+    </p>
+  </section>
+
+  <!-- DEPOSIT / WITHDRAW -->
+  <section id="walletSection">
+    <h2>💰 Wallet</h2>
+
+    <div class="buttons">
+
+      <button class="deposit" onclick="depositDemo()">
+        ➕ Deposit
+      </button>
+
+      <button class="withdraw" onclick="withdrawDemo()">
+        ➖ Withdrawal
+      </button>
+
+    </div>
+
+    <p class="note">
+      Demo wallet only. Real Telebirr, Kifiya and Quturi
+      payment integration will be connected through the backend.
+    </p>
+  </section>
+
+  <!-- PROFILE -->
+  <section id="profile">
+    <h2>👤 Profile</h2>
+
+    <div class="profile-card">
+      <b id="profileName">Telegram User</b>
+      <p id="profileId">Telegram authentication waiting...</p>
+    </div>
+  </section>
+
+  <!-- HISTORY -->
+  <section>
+    <h2>📋 Transactions</h2>
+
+    <div class="history" id="history">
+      <p>No transactions yet.</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+
+  <a href="#">
+    <span>🏠</span>
+    Home
+  </a>
+
+  <a href="#games">
+    <span>🎮</span>
+    Games
+  </a>
+
+  <a href="#sports">
+    <span>⚽</span>
+    Sports
+  </a>
+
+  <a href="#walletSection">
+    <span>💰</span>
+    Wallet
+  </a>
+
+</nav>
+
+<script>
+
+  /* -----------------------------
+     TELEGRAM MINI APP
+  ----------------------------- */
+
+  const tg = window.Telegram?.WebApp;
+
+  if(tg){
+
+    tg.ready();
+    tg.expand();
+
+    const user = tg.initDataUnsafe?.user;
+
+    if(user){
+
+      document.getElementById("telegramUser").textContent =
+        user.first_name || "User";
+
+      document.getElementById("profileName").textContent =
+        (user.first_name || "") +
+        (user.last_name ? " " + user.last_name : "");
+
+      document.getElementById("profileId").textContent =
+        "Telegram ID: " + user.id;
+
+    }
+  }
+
+
+  /* -----------------------------
+     DEMO BALANCE
+  ----------------------------- */
+
+  let balance =
+    Number(localStorage.getItem("hulugamee_balance") || 1000);
+
+  function updateBalance(){
+
+    document.getElementById("balance").textContent =
+      balance.toFixed(2);
+
+    document.getElementById("walletBalance").textContent =
+      balance.toFixed(2) + " ETB";
+
+    localStorage.setItem(
+      "hulugamee_balance",
+      balance
+    );
+  }
+
+  updateBalance();
+
+
+  /* -----------------------------
+     DEMO DEPOSIT
+  ----------------------------- */
+
+  function depositDemo(){
+
+    const amount =
+      Number(prompt("Deposit demo amount:"));
+
+    if(!amount || amount <= 0){
+      alert("Enter a valid amount.");
+      return;
+    }
+
+    balance += amount;
+
+    addHistory(
+      "Deposit +" + amount.toFixed(2) + " ETB"
+    );
+
+    updateBalance();
+
+    alert(
+      "Demo deposit added: " +
+      amount.toFixed(2) +
+      " ETB"
+    );
+  }
+
+
+  /* -----------------------------
+     DEMO WITHDRAWAL
+  ----------------------------- */
+
+  function withdrawDemo(){
+
+    const amount =
+      Number(prompt("Withdrawal demo amount:"));
+
+    if(!amount || amount <= 0){
+      alert("Enter a valid amount.");
+      return;
+    }
+
+    if(amount > balance){
+
+      alert("Insufficient demo balance.");
+      return;
+    }
+
+    balance -= amount;
+
+    addHistory(
+      "Withdrawal -" +
+      amount.toFixed(2) +
+      " ETB"
+    );
+
+    updateBalance();
+
+    alert(
+      "Demo withdrawal recorded: " +
+      amount.toFixed(2) +
+      " ETB"
+    );
+  }
+
+
+  /* -----------------------------
+     TRANSACTION HISTORY
+  ----------------------------- */
+
+  function addHistory(text){
+
+    const history =
+      document.getElementById("history");
+
+    if(
+      history.children.length === 1 &&
+      history.children[0].textContent ===
+      "No transactions yet."
+    ){
+
+      history.innerHTML = "";
+    }
+
+    const item =
+      document.createElement("p");
+
+    item.textContent =
+      new Date().toLocaleTimeString() +
+      " — " +
+      text;
+
+    history.prepend(item);
+  }
+
+</script>
+
+</body>
+  </html>
