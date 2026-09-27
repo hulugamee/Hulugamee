@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hulugamee</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #080d16;
+      color: white;
+    }
+
+    header {
+      padding: 20px;
+      text-align: center;
+      background: #101827;
+      border-bottom: 1px solid #263247;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+
+    .balance {
+      margin-top: 10px;
+      color: #00e676;
+      font-weight: bold;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .menu {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .game {
+      padding: 22px 10px;
+      border: none;
+      border-radius: 12px;
+      background: #172235;
+      color: white;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    .game:hover {
+      background: #22324d;
+    }
+
+    .actions {
+      margin-top: 25px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .action {
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .deposit {
+      background: #00c853;
+      color: white;
+    }
+
+    .withdraw {
+      background: #ff9800;
+      color: white;
+    }
+
+    .history {
+      background: #455a64;
+      color: white;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #8995a7;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🎮 Hulugamee</h1>
+  <div class="balance">Balance: 0.00 ETB</div>
+</header>
+
+<div class="container">
+
+  <h2>Games</h2>
+
+  <div class="menu">
+
+    <button class="game" onclick="location.href='games/aviator.html'">
+      ✈️ Aviator
+    </button>
+
+    <button class="game" onclick="location.href='games/dice.html'">
+      🎲 Dice
+    </button>
+
+    <button class="game" onclick="location.href='games/mines.html'">
+      💣 Mines
+    </button>
+
+    <button class="game" onclick="location.href='games/plinko.html'">
+      🔴 Plinko
+    </button>
+
+    <button class="game" onclick="location.href='games/keno.html'">
+      🎯 Keno
+    </button>
+
+    <button class="game" onclick="location.href='games/spin.html'">
+      🎰 Spin
+    </button>
+
+    <button class="game" onclick="location.href='games/jetx.html'">
+      🚀 JetX
+    </button>
+
+  </div>
+
+  <div class="actions">
+
+    <button class="action deposit"
+      onclick="alert('Demo Deposit: This button is for testing only.')">
+      💰 Deposit
+    </button>
+
+    <button class="action withdraw"
+      onclick="alert('Demo Withdrawal: This button is for testing only.')">
+      💸 Withdrawal
+    </button>
+
+    <button class="action history"
+      onclick="alert('Transaction History')">
+      📋 Transaction History
+    </button>
+
+  </div>
+
+</div>
+
+<footer>
+  Hulugamee © 2026
+</footer>
+
+</body>
+</html>
