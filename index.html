@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hulugamee Aviator Demo</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#080d16;
+  color:#fff;
+}
+
+header{
+  padding:18px;
+  text-align:center;
+  background:#111927;
+  border-bottom:1px solid #263348;
+}
+
+header h1{
+  margin:0;
+  color:#ffb300;
+}
+
+.demo{
+  margin-top:6px;
+  color:#ff5252;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.balance{
+  margin:15px;
+  padding:18px;
+  text-align:center;
+  background:#121c2b;
+  border-radius:15px;
+}
+
+.balance small{
+  color:#aaa;
+}
+
+.balance strong{
+  display:block;
+  margin-top:5px;
+  color:#00e676;
+  font-size:28px;
+}
+
+.game{
+  margin:15px;
+  padding:25px 15px;
+  height:300px;
+  text-align:center;
+  background:linear-gradient(150deg,#172b46,#090e17);
+  border-radius:18px;
+  overflow:hidden;
+}
+
+.plane{
+  margin-top:25px;
+  font-size:55px;
+}
+
+.multiplier{
+  margin-top:20px;
+  font-size:48px;
+  font-weight:bold;
+  color:#00e676;
+}
+
+.status{
+  margin-top:8px;
+  color:#aaa;
+}
+
+.controls,
+.panel{
+  margin:15px;
+  padding:16px;
+  background:#111927;
+  border-radius:15px;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  margin-top:8px;
+  border:0;
+  border-radius:10px;
+  background:#202b3b;
+  color:white;
+  font-size:16px;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border:0;
+  border-radius:10px;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+}
+
+.start{background:#00a844}
+.bet{background:#ff9800}
+.cashout{background:#e91e63}
+.deposit{background:#1565c0}
+.withdraw{background:#7b1fa2}
+
+.menu{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin:15px;
+}
+
+.menu button{
+  margin:0;
+  background:#182334;
+}
+
+.panel{
+  display:none;
+}
+
+.panel h2{
+  margin-top:0;
+  color:#ffb300;
+}
+
+.note{
+  color:#aaa;
+  font-size:13px;
+  line-height:1.5;
+}
+
+#message{
+  min-height:20px;
+  margin:10px 15px;
+  text-align:center;
+  color:#00e676;
+}
+
+.history{
+  padding:10px;
+  margin-top:8px;
+  background:#1a2535;
+  border-radius:8px;
+  font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>✈️ HULUGAMEE AVIATOR</h1>
+  <div class="demo">DEMO MODE — NO REAL MONEY</div>
+</header>
+
+<div class="balance">
+  <small>Demo Balance</small>
+  <strong id="balance">1000.00</strong>
+</div>
+
+<div class="game">
+
+  <div class="plane" id="plane">✈️</div>
+
+  <div class="multiplier" id="multiplier">
+    1.00x
+  </div>
+
+  <div class="status" id="status">
+    Press START to begin
+  </div>
+
+</div>
+
+<div id="message"></div>
+
+<div class="controls">
+
+  <input
+    id="betAmount"
+    type="number"
+    min="1"
+    value="10"
+    placeholder="Demo bet"
+  >
+
+  <button class="start" onclick="startGame()">
+    🚀 START ROUND
+  </button>
+
+  <button class="bet" onclick="placeBet()">
+    💰 PLACE DEMO BET
+  </button>
+
+  <button class="cashout" onclick="cashOut()">
+    💵 CASH OUT
+  </button>
+
+</div>
+
+<div class="menu">
+
+  <button onclick="openPanel('depositPanel')">
+    💳 Deposit
+  </button>
+
+  <button onclick="openPanel('withdrawPanel')">
+    💸 Withdrawal
+  </button>
+
+  <button onclick="openPanel('historyPanel')">
+    📜 History
+  </button>
+
+  <button onclick="openPanel('accountPanel')">
+    👤 Account
+  </button>
+
+</div>
+
+<!-- DEPOSIT DEMO -->
+
+<div class="panel" id="depositPanel">
+
+  <h2>💳 Demo Deposit</h2>
+
+  <p class="note">
+    Enter a demonstration transaction/reference number.
+    No real payment is processed.
+  </p>
+
+  <input
+    id="reference"
+    type="text"
+    placeholder="Transaction reference"
+  >
+
+  <input
+    id="depositAmount"
+    type="number"
+    min="1"
+    placeholder="Demo amount"
+  >
+
+  <button class="deposit" onclick="submitDeposit()">
+    Submit Deposit Request
+  </button>
+
+</div>
+
+<!-- WITHDRAW DEMO -->
+
+<div class="panel" id="withdrawPanel">
+
+  <h2>💸 Demo Withdrawal</h2>
+
+  <p class="note">
+    This is only a demonstration. No real money is transferred.
+  </p>
+
+  <input
+    id="withdrawAmount"
+    type="number"
+    min="1"
+    placeholder="Demo amount"
+  >
+
+  <button class="withdraw" onclick="submitWithdrawal()">
+    Request Withdrawal
+  </button>
+
+</div>
+
+<!-- HISTORY -->
+
+<div class="panel" id="historyPanel">
+
+  <h2>📜 History</h2>
+
+  <div id="historyList">
+    <div class="history">
+      No transactions yet.
+    </div>
+  </div>
+
+</div>
+
+<!-- ACCOUNT -->
+
+<div class="panel" id="accountPanel">
+
+  <h2>👤 Demo Account</h2>
+
+  <p class="note">
+    User ID: demo-user
+  </p>
+
+  <p class="note">
+    Account type: DEMO
+  </p>
+
+</div>
+
+<script>
+
+let balance = 1000;
+let multiplier = 1;
+let activeBet = 0;
+let running = false;
+let timer = null;
+let crashPoint = 2.50;
+
+const balanceEl =
+  document.getElementById("balance");
+
+const multiplierEl =
+  document.getElementById("multiplier");
+
+const statusEl =
+  document.getElementById("status");
+
+const messageEl =
+  document.getElementById("message");
+
+function updateBalance(){
+
+  balanceEl.textContent =
+    balance.toFixed(2);
+
+}
+
+function showMessage(text){
+
+  messageEl.textContent = text;
+
+  setTimeout(()=>{
+    messageEl.textContent = "";
+  },3000);
+
+}
+
+function startGame(){
+
+  if(running){
+    showMessage("Round is already running.");
+    return;
+  }
+
+  multiplier = 1;
+
+  crashPoint =
+    Number((1.20 + Math.random()*4).toFixed(2));
+
+  running = true;
+
+  multiplierEl.textContent =
+    "1.00x";
+
+  statusEl.textContent =
+    "🚀 Flying...";
+
+  clearInterval(timer);
+
+  timer = setInterval(()=>{
+
+    multiplier +=
+      0.01 + multiplier*0.006;
+
+    multiplierEl.textContent =
+      multiplier.toFixed(2) + "x";
+
+    if(multiplier >= crashPoint){
+
+      clearInterval(timer);
+
+      running = false;
+
+      statusEl.textContent =
+        "💥 CRASHED at " +
+        crashPoint.toFixed(2) +
+        "x";
+
+      if(activeBet > 0){
+
+        addHistory(
+          "LOSE",
+          activeBet,
+          crashPoint,
+          0
+        );
+
+        activeBet = 0;
+      }
+
+    }
+
+  },100);
+
+}
+
+function placeBet(){
+
+  if(!running){
+    showMessage("Start the round first.");
+    return;
+  }
+
+  if(activeBet > 0){
+    showMessage("You already placed a bet.");
+    return;
+  }
+
+  const amount =
+    Number(
+      document.getElementById("betAmount").value
+    );
+
+  if(!Number.isFinite(amount) || amount <= 0){
+    showMessage("Enter a valid amount.");
+    return;
+  }
+
+  if(amount > balance){
+    showMessage("Insufficient demo balance.");
+    return;
+  }
+
+  balance -= amount;
+
+  activeBet = amount;
+
+  updateBalance();
+
+  showMessage(
+    "Demo bet placed: " +
+    amount.toFixed(2)
+  );
+
+}
+
+function cashOut(){
+
+  if(!running){
+    showMessage("No active round.");
+    return;
+  }
+
+  if(activeBet <= 0){
+    showMessage("Place a demo bet first.");
+    return;
+  }
+
+  const win =
+    activeBet * multiplier;
+
+  balance += win;
+
+  addHistory(
+    "CASH OUT",
+    activeBet,
+    multiplier,
+    win
+  );
+
+  activeBet = 0;
+
+  updateBalance();
+
+  showMessage(
+    "Cashed out at " +
+    multiplier.toFixed(2) +
+    "x"
+  );
+
+}
+
+function openPanel(id){
+
+  document
+    .querySelectorAll(".panel")
+    .forEach(panel=>{
+      panel.style.display="none";
+    });
+
+  document.getElementById(id)
+    .style.display="block";
+
+}
+
+function addHistory(
+  type,
+  bet,
+  multi,
+  result
+){
+
+  const list =
+    document.getElementById(
+      "historyList"
+    );
+
+  const item =
+    document.createElement("div");
+
+  item.className="history";
+
+  item.innerHTML =
+    "<b>"+type+"</b><br>"+
+    "Bet: "+bet.toFixed(2)+"<br>"+
+    "Multiplier: "+multi.toFixed(2)+"x<br>"+
+    "Result: "+result.toFixed(2);
+
+  list.prepend(item);
+
+}
+
+function submitDeposit(){
+
+  const reference =
+    document.getElementById(
+      "reference"
+    ).value.trim();
+
+  const amount =
+    Number(
+      document.getElementById(
+        "depositAmount"
+      ).value
+    );
+
+  if(!reference){
+    showMessage(
+      "Enter a demo reference number."
+    );
+    return;
+  }
+
+  if(!Number.isFinite(amount) || amount <= 0){
+    showMessage(
+      "Enter a valid demo amount."
+    );
+    return;
+  }
+
+  addHistory(
+    "DEPOSIT PENDING",
+    0,
+    0,
+    amount
+  );
+
+  showMessage(
+    "Demo deposit sent for admin review."
+  );
+
+}
+
+function submitWithdrawal(){
+
+  const amount =
+    Number(
+      document.getElementById(
+        "withdrawAmount"
+      ).value
+    );
+
+  if(!Number.isFinite(amount) || amount <= 0){
+    showMessage(
+      "Enter a valid demo amount."
+    );
+    return;
+  }
+
+  if(amount > balance){
+    showMessage(
+      "Insufficient demo balance."
+    );
+    return;
+  }
+
+  addHistory(
+    "WITHDRAWAL PENDING",
+    0,
+    0,
+    amount
+  );
+
+  showMessage(
+    "Demo withdrawal request submitted."
+  );
+
+}
+
+updateBalance();
+
+</script>
+
+</body>
+    </html>
